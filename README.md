@@ -7,4 +7,9 @@ A tool to place all your scenes and easily navigate between with a single click.
 Go to Windows>Scenes Holder
 press Get All build scenes button or Add scenes manually from your project.
 
+
+![2](https://user-images.githubusercontent.com/36339248/192696117-fcba9796-394e-42a6-aba8-5eb748171d77.png)
+
+Boom! you are ready to go.
+
 ![Untitled](https://user-images.githubusercontent.com/36339248/192695551-6609aec9-be44-4823-90eb-0c0c8c17ff25.png)
