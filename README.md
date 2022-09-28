@@ -2,7 +2,8 @@
 
 A tool to place all your scenes and easily navigate between with a single click.
 
-How to Use:
+## How to Use:
+
 Go to Windows>Scenes Holder
 press Get All build scenes button or Add scenes manually from your project.
 
