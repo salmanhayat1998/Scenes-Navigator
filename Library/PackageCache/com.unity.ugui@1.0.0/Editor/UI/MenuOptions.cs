@@ -410,7 +410,10 @@ namespace UnityEditor.UI
             if (EditorUtility.IsPersistent(canvas) || (canvas.hideFlags & HideFlags.HideInHierarchy) != 0)
                 return false;
 
-            return StageUtility.GetStageHandle(canvas.gameObject) == StageUtility.GetCurrentStageHandle();
+            if (StageUtility.GetStageHandle(canvas.gameObject) != StageUtility.GetCurrentStageHandle())
+                return false;
+
+            return true;
         }
     }
 }

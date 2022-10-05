@@ -36,46 +36,6 @@ namespace UnityEditor.UI
         AnimBool m_ShowFilled;
         AnimBool m_ShowType;
 
-        private class Styles
-        {
-            public static GUIContent text = EditorGUIUtility.TrTextContent("Fill Origin");
-            public static GUIContent[] OriginHorizontalStyle =
-            {
-                EditorGUIUtility.TrTextContent("Left"),
-                EditorGUIUtility.TrTextContent("Right")
-            };
-
-            public static GUIContent[] OriginVerticalStyle =
-            {
-                EditorGUIUtility.TrTextContent("Bottom"),
-                EditorGUIUtility.TrTextContent("Top")
-            };
-
-            public static GUIContent[] Origin90Style =
-            {
-                EditorGUIUtility.TrTextContent("BottomLeft"),
-                EditorGUIUtility.TrTextContent("TopLeft"),
-                EditorGUIUtility.TrTextContent("TopRight"),
-                EditorGUIUtility.TrTextContent("BottomRight")
-            };
-
-            public static GUIContent[] Origin180Style =
-            {
-                EditorGUIUtility.TrTextContent("Bottom"),
-                EditorGUIUtility.TrTextContent("Left"),
-                EditorGUIUtility.TrTextContent("Top"),
-                EditorGUIUtility.TrTextContent("Right")
-            };
-
-            public static GUIContent[] Origin360Style =
-            {
-                EditorGUIUtility.TrTextContent("Bottom"),
-                EditorGUIUtility.TrTextContent("Right"),
-                EditorGUIUtility.TrTextContent("Top"),
-                EditorGUIUtility.TrTextContent("Left")
-            };
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -238,23 +198,22 @@ namespace UnityEditor.UI
                     {
                         m_FillOrigin.intValue = 0;
                     }
-                    var shapeRect = EditorGUILayout.GetControlRect(true);
                     switch ((Image.FillMethod)m_FillMethod.enumValueIndex)
                     {
                         case Image.FillMethod.Horizontal:
-                            EditorGUI.Popup(shapeRect, m_FillOrigin, Styles.OriginHorizontalStyle, Styles.text);
+                            m_FillOrigin.intValue = (int)(Image.OriginHorizontal)EditorGUILayout.EnumPopup("Fill Origin", (Image.OriginHorizontal)m_FillOrigin.intValue);
                             break;
                         case Image.FillMethod.Vertical:
-                            EditorGUI.Popup(shapeRect, m_FillOrigin, Styles.OriginVerticalStyle, Styles.text);
+                            m_FillOrigin.intValue = (int)(Image.OriginVertical)EditorGUILayout.EnumPopup("Fill Origin", (Image.OriginVertical)m_FillOrigin.intValue);
                             break;
                         case Image.FillMethod.Radial90:
-                            EditorGUI.Popup(shapeRect, m_FillOrigin, Styles.Origin90Style, Styles.text);
+                            m_FillOrigin.intValue = (int)(Image.Origin90)EditorGUILayout.EnumPopup("Fill Origin", (Image.Origin90)m_FillOrigin.intValue);
                             break;
                         case Image.FillMethod.Radial180:
-                            EditorGUI.Popup(shapeRect, m_FillOrigin, Styles.Origin180Style, Styles.text);
+                            m_FillOrigin.intValue = (int)(Image.Origin180)EditorGUILayout.EnumPopup("Fill Origin", (Image.Origin180)m_FillOrigin.intValue);
                             break;
                         case Image.FillMethod.Radial360:
-                            EditorGUI.Popup(shapeRect, m_FillOrigin, Styles.Origin360Style, Styles.text);
+                            m_FillOrigin.intValue = (int)(Image.Origin360)EditorGUILayout.EnumPopup("Fill Origin", (Image.Origin360)m_FillOrigin.intValue);
                             break;
                     }
                     EditorGUILayout.PropertyField(m_FillAmount);

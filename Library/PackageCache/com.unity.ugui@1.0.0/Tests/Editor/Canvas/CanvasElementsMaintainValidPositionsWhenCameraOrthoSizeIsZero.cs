@@ -1,7 +1,7 @@
-using NUnit.Framework;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.TestTools;
+using NUnit.Framework;
+using System.Collections;
 using UnityEngine.UI;
 
 
@@ -26,13 +26,6 @@ public class CanvasElementsMaintainValidPositionsWhenCameraOrthoSizeIsZero
         var canvasComponent = canvas.GetComponent<Canvas>();
         canvasComponent.worldCamera = camera.GetComponent<Camera>();
         canvasComponent.renderMode = RenderMode.ScreenSpaceCamera;
-    }
-
-    [TearDown]
-    public void TearDown()
-    {
-        GameObject.DestroyImmediate(canvas);
-        GameObject.DestroyImmediate(camera);
     }
 
     [UnityTest]

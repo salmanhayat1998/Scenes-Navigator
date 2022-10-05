@@ -123,16 +123,11 @@ namespace Graphics
             raycaster.Raycast(data, raycastResultCache);
         }
 
-        private bool CheckGraphicAddedToGraphicRegistry()
+        private bool CheckGraphicAddedToGraphicRaycaster()
         {
+            // check that Graphic is removed from m_CanvasGraphics
+            var raycaster = m_canvas.GetComponent<GraphicRaycaster>();
             var graphicList = GraphicRegistry.GetGraphicsForCanvas(m_canvas);
-            var graphicListSize = graphicList.Count;
-            return ContainsGraphic(graphicList, graphicListSize, m_graphic);
-        }
-
-        private bool CheckGraphicAddedToRaycastGraphicRegistry()
-        {
-            var graphicList = GraphicRegistry.GetRaycastableGraphicsForCanvas(m_canvas);
             var graphicListSize = graphicList.Count;
             return ContainsGraphic(graphicList, graphicListSize, m_graphic);
         }
@@ -140,8 +135,7 @@ namespace Graphics
         private void CheckGraphicRaycastDisableValidity()
         {
             RefreshGraphicByRaycast();
-            Assert.False(CheckGraphicAddedToGraphicRegistry(), "Graphic should no longer be registered in m_CanvasGraphics");
-            Assert.False(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should no longer be registered in m_RaycastableGraphics");
+            Assert.False(CheckGraphicAddedToGraphicRaycaster(), "Graphic should no longer be registered in m_CanvasGraphics");
         }
 
         [Test]
@@ -150,8 +144,7 @@ namespace Graphics
             m_graphic.enabled = false;
             m_graphic.enabled = true; // on enable is called directly
 
-            Assert.True(CheckGraphicAddedToGraphicRegistry(), "Graphic should be registered in m_CanvasGraphics");
-            Assert.True(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should be registered in m_RaycastableGraphics");
+            Assert.True(CheckGraphicAddedToGraphicRaycaster(), "Graphic should be registered in m_CanvasGraphics");
 
             Assert.AreEqual(Texture2D.whiteTexture, m_graphic.mainTexture, "mainTexture should be Texture2D.whiteTexture");
 
@@ -206,59 +199,6 @@ namespace Graphics
             Assert.True(m_dirtyVert, "Vertices have not been dirtied");
             Assert.True(m_dirtyLayout, "Layout has not been dirtied");
             Assert.True(m_dirtyMaterial, "Material has not been dirtied");
-        }
-
-        [Test]
-        public void MakingGraphicNonRaycastableRemovesGraphicFromProperLists()
-        {
-            Assert.True(CheckGraphicAddedToGraphicRegistry(), "Graphic should be registered in m_CanvasGraphics");
-            Assert.True(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should be registered in m_RaycastableGraphics");
-
-            m_graphic.raycastTarget = false;
-
-            Assert.True(CheckGraphicAddedToGraphicRegistry(), "Graphic should be registered in m_CanvasGraphics");
-            Assert.False(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should no longer be registered in m_RaycastableGraphics");
-        }
-
-        [Test]
-        public void OnEnableLeavesNonRaycastGraphicInExpectedState()
-        {
-            m_graphic.enabled = false;
-            m_graphic.raycastTarget = false;
-            m_graphic.enabled = true; // on enable is called directly
-
-            Assert.True(CheckGraphicAddedToGraphicRegistry(), "Graphic should be registered in m_CanvasGraphics");
-            Assert.False(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should no longer be registered in m_RaycastableGraphics");
-
-            Assert.AreEqual(Texture2D.whiteTexture, m_graphic.mainTexture, "mainTexture should be Texture2D.whiteTexture");
-
-            Assert.NotNull(m_graphic.canvas);
-
-            Assert.True(m_dirtyVert, "Vertices have not been dirtied");
-            Assert.True(m_dirtyLayout, "Layout has not been dirtied");
-            Assert.True(m_dirtyMaterial, "Material has not been dirtied");
-        }
-
-        [Test]
-        public void SettingRaycastTargetOnDisabledGraphicDoesntAddItRaycastList()
-        {
-            Assert.True(CheckGraphicAddedToGraphicRegistry(), "Graphic should be registered in m_CanvasGraphics");
-            Assert.True(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should be registered in m_RaycastableGraphics");
-
-            m_graphic.raycastTarget = false;
-
-            Assert.True(CheckGraphicAddedToGraphicRegistry(), "Graphic should be registered in m_CanvasGraphics");
-            Assert.False(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should no longer be registered in m_RaycastableGraphics");
-
-            m_graphic.enabled = false;
-
-            Assert.False(CheckGraphicAddedToGraphicRegistry(), "Graphic should NOT be registered in m_CanvasGraphics");
-            Assert.False(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should no longer be registered in m_RaycastableGraphics");
-
-            m_graphic.raycastTarget = true;
-
-            Assert.False(CheckGraphicAddedToGraphicRegistry(), "Graphic should NOT be registered in m_CanvasGraphics");
-            Assert.False(CheckGraphicAddedToRaycastGraphicRegistry(), "Graphic should no longer be registered in m_RaycastableGraphics");
         }
     }
 }

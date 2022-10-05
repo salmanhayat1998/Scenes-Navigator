@@ -180,20 +180,22 @@ namespace UnityEngine.UI
         /// <summary>
         /// Simple getter for a code generated default ColorBlock.
         /// </summary>
-        public static ColorBlock defaultColorBlock;
-
-        static ColorBlock()
+        public static ColorBlock defaultColorBlock
         {
-            defaultColorBlock = new ColorBlock
+            get
             {
-                m_NormalColor      = new Color32(255, 255, 255, 255),
-                m_HighlightedColor = new Color32(245, 245, 245, 255),
-                m_PressedColor     = new Color32(200, 200, 200, 255),
-                m_SelectedColor    = new Color32(245, 245, 245, 255),
-                m_DisabledColor    = new Color32(200, 200, 200, 128),
-                colorMultiplier    = 1.0f,
-                fadeDuration       = 0.1f
-            };
+                var c = new ColorBlock
+                {
+                    m_NormalColor      = new Color32(255, 255, 255, 255),
+                    m_HighlightedColor = new Color32(245, 245, 245, 255),
+                    m_PressedColor     = new Color32(200, 200, 200, 255),
+                    m_SelectedColor    = new Color32(245, 245, 245, 255),
+                    m_DisabledColor    = new Color32(200, 200, 200, 128),
+                    colorMultiplier    = 1.0f,
+                    fadeDuration       = 0.1f
+                };
+                return c;
+            }
         }
 
         public override bool Equals(object obj)

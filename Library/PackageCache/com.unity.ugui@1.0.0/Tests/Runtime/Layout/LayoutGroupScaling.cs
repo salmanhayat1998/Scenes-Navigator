@@ -12,7 +12,6 @@ namespace LayoutTests
     public class LayoutGroupScaling : IPrebuildSetup
     {
         GameObject m_PrefabRoot;
-        GameObject m_CameraGO;
 
         const string kPrefabPath = "Assets/Resources/LayoutGroupScalingPrefab.prefab";
 
@@ -56,7 +55,7 @@ namespace LayoutTests
         public void TestSetup()
         {
             m_PrefabRoot = Object.Instantiate(Resources.Load("LayoutGroupScalingPrefab")) as GameObject;
-            m_CameraGO = new GameObject("Camera", typeof(Camera));
+            new GameObject("Camera", typeof(Camera));
         }
 
         [UnityTest]
@@ -89,7 +88,6 @@ namespace LayoutTests
         public void TearDown()
         {
             Object.DestroyImmediate(m_PrefabRoot);
-            GameObject.DestroyImmediate(m_CameraGO);
         }
 
         [OneTimeTearDown]

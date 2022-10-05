@@ -86,7 +86,7 @@ namespace UnityEngine.UI
         /// Returns a non-destroyed instance or a null reference.
         /// </remarks>
         [NonSerialized] private Canvas m_Canvas;
-        internal Canvas Canvas
+        private Canvas Canvas
         {
             get
             {
@@ -265,8 +265,8 @@ namespace UnityEngine.UI
             {
                 foreach (MaskableGraphic maskableTarget in m_MaskableTargets)
                 {
-                    //Case 1170399 - hasMoved is not a valid check when animating on pivot of the object
-                    maskableTarget.Cull(clipRect, validRect);
+                    if (maskableTarget.canvasRenderer.hasMoved)
+                        maskableTarget.Cull(clipRect, validRect);
                 }
             }
 
@@ -337,7 +337,6 @@ namespace UnityEngine.UI
 
         protected override void OnTransformParentChanged()
         {
-            m_Canvas = null;
             base.OnTransformParentChanged();
             m_ShouldRecalculateClipRects = true;
         }

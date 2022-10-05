@@ -27,6 +27,9 @@ namespace InputfieldTests
         public virtual void TestSetup()
         {
             m_PrefabRoot = UnityEngine.Object.Instantiate(Resources.Load("GenericInputFieldPrefab")) as GameObject;
+
+            FieldInfo inputModule = typeof(EventSystem).GetField("m_CurrentInputModule", BindingFlags.NonPublic | BindingFlags.Instance);
+            inputModule.SetValue(m_PrefabRoot.GetComponentInChildren<EventSystem>(), m_PrefabRoot.GetComponentInChildren<FakeInputModule>());
         }
 
         [TearDown]

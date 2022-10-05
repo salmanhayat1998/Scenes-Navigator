@@ -430,6 +430,9 @@ namespace UnityEngine.UI
                 return;
             #endif
 
+            m_AlphaTweenRunner = new TweenRunner<FloatTween>();
+            m_AlphaTweenRunner.Init(this);
+
             if (m_CaptionImage)
                 m_CaptionImage.enabled = (m_CaptionImage.sprite != null);
 
@@ -550,8 +553,7 @@ namespace UnityEngine.UI
         /// </example>
         public void AddOptions(List<string> options)
         {
-            var optionsCount = options.Count;
-            for (int i = 0; i < optionsCount; i++)
+            for (int i = 0; i < options.Count; i++)
                 this.options.Add(new OptionData(options[i]));
             RefreshShownValue();
         }
@@ -565,8 +567,7 @@ namespace UnityEngine.UI
         /// </remarks>
         public void AddOptions(List<Sprite> options)
         {
-            var optionsCount = options.Count;
-            for (int i = 0; i < optionsCount; i++)
+            for (int i = 0; i < options.Count; i++)
                 this.options.Add(new OptionData(options[i]));
             RefreshShownValue();
         }
@@ -642,7 +643,8 @@ namespace UnityEngine.UI
             }
 
             // checks if a Canvas already exists before overriding it. (case 958281 - [UI] Child Canvas' Sorting Layer is changed to the same value as the parent)
-            if (!templateGo.TryGetComponent<Canvas>(out _))
+            Canvas discardableCanvas;
+            if (!templateGo.TryGetComponent<Canvas>(out discardableCanvas))
             {
                 Canvas popupCanvas = templateGo.AddComponent<Canvas>();
                 popupCanvas.overrideSorting = true;
@@ -735,11 +737,10 @@ namespace UnityEngine.UI
                 return;
 
             // case 1064466 rootCanvas should be last element returned by GetComponentsInParent()
-            var listCount = list.Count;
-            Canvas rootCanvas = list[listCount - 1];
-            for (int i = 0; i < listCount; i++)
+            Canvas rootCanvas = list[list.Count - 1];
+            for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].isRootCanvas || list[i].overrideSorting)
+                if (list[i].isRootCanvas)
                 {
                     rootCanvas = list[i];
                     break;
@@ -788,8 +789,7 @@ namespace UnityEngine.UI
             m_Items.Clear();
 
             Toggle prev = null;
-            var optionsCount = options.Count;
-            for (int i = 0; i < optionsCount; ++i)
+            for (int i = 0; i < options.Count; ++i)
             {
                 OptionData data = options[i];
                 DropdownItem item = AddItem(data, value == i, itemTemplate, m_Items);
@@ -857,13 +857,12 @@ namespace UnityEngine.UI
                     RectTransformUtility.FlipLayoutOnAxis(dropdownRectTransform, axis, false, false);
             }
 
-            var itemsCount = m_Items.Count;
-            for (int i = 0; i < itemsCount; i++)
+            for (int i = 0; i < m_Items.Count; i++)
             {
                 RectTransform itemRect = m_Items[i].rectTransform;
                 itemRect.anchorMin = new Vector2(itemRect.anchorMin.x, 0);
                 itemRect.anchorMax = new Vector2(itemRect.anchorMax.x, 0);
-                itemRect.anchoredPosition = new Vector2(itemRect.anchoredPosition.x, offsetMin.y + itemSize.y * (itemsCount - 1 - i) + itemSize.y * itemRect.pivot.y);
+                itemRect.anchoredPosition = new Vector2(itemRect.anchoredPosition.x, offsetMin.y + itemSize.y * (m_Items.Count - 1 - i) + itemSize.y * itemRect.pivot.y);
                 itemRect.sizeDelta = new Vector2(itemRect.sizeDelta.x, itemSize.y);
             }
 
@@ -1089,8 +1088,7 @@ namespace UnityEngine.UI
 
         private void ImmediateDestroyDropdownList()
         {
-            var itemsCount = m_Items.Count;
-            for (int i = 0; i < itemsCount; i++)
+            for (int i = 0; i < m_Items.Count; i++)
             {
                 if (m_Items[i] != null)
                     DestroyItem(m_Items[i]);

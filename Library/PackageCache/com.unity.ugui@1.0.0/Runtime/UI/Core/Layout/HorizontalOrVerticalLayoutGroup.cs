@@ -69,17 +69,6 @@ namespace UnityEngine.UI
         public bool childScaleHeight { get { return m_ChildScaleHeight; } set { SetProperty(ref m_ChildScaleHeight, value); } }
 
         /// <summary>
-        /// Whether the order of children objects should be sorted in reverse.
-        /// </summary>
-        /// <remarks>
-        /// If False the first child object will be positioned first.
-        /// If True the last child object will be positioned first.
-        /// </remarks>
-        public bool reverseArrangement { get { return m_ReverseArrangement; } set { SetProperty(ref m_ReverseArrangement, value); } }
-
-        [SerializeField] protected bool m_ReverseArrangement = false;
-
-        /// <summary>
         /// Calculate the layout element properties for this layout element along the given axis.
         /// </summary>
         /// <param name="axis">The axis to calculate for. 0 is horizontal and 1 is vertical.</param>
@@ -96,8 +85,7 @@ namespace UnityEngine.UI
             float totalFlexible = 0;
 
             bool alongOtherAxis = (isVertical ^ (axis == 1));
-            var rectChildrenCount = rectChildren.Count;
-            for (int i = 0; i < rectChildrenCount; i++)
+            for (int i = 0; i < rectChildren.Count; i++)
             {
                 RectTransform child = rectChildren[i];
                 float min, preferred, flexible;
@@ -150,14 +138,10 @@ namespace UnityEngine.UI
             float alignmentOnAxis = GetAlignmentOnAxis(axis);
 
             bool alongOtherAxis = (isVertical ^ (axis == 1));
-            int startIndex = m_ReverseArrangement ? rectChildren.Count - 1 : 0;
-            int endIndex = m_ReverseArrangement ? 0 : rectChildren.Count;
-            int increment = m_ReverseArrangement ? -1 : 1;
             if (alongOtherAxis)
             {
                 float innerSize = size - (axis == 0 ? padding.horizontal : padding.vertical);
-
-                for (int i = startIndex; m_ReverseArrangement ? i >= endIndex : i < endIndex; i += increment)
+                for (int i = 0; i < rectChildren.Count; i++)
                 {
                     RectTransform child = rectChildren[i];
                     float min, preferred, flexible;
@@ -195,7 +179,7 @@ namespace UnityEngine.UI
                 if (GetTotalMinSize(axis) != GetTotalPreferredSize(axis))
                     minMaxLerp = Mathf.Clamp01((size - GetTotalMinSize(axis)) / (GetTotalPreferredSize(axis) - GetTotalMinSize(axis)));
 
-                for (int i = startIndex; m_ReverseArrangement ? i >= endIndex : i < endIndex; i += increment)
+                for (int i = 0; i < rectChildren.Count; i++)
                 {
                     RectTransform child = rectChildren[i];
                     float min, preferred, flexible;

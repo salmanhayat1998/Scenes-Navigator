@@ -59,7 +59,7 @@ namespace UnityEditor.Events
             Profiler.BeginSample("ComponentInterceptedEvents.Initialize");
 
             base.Initialize(targets);
-            m_TargetEvents = new Dictionary<GameObject, List<ComponentInterceptedEvents>>(targets.Length);
+            m_TargetEvents = new Dictionary<GameObject, List<ComponentInterceptedEvents>>(targets.Count());
             m_InterceptsAnyEvent = false;
             for (int i = 0; i < targets.Length; ++i)
             {

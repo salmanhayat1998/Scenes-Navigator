@@ -30,7 +30,6 @@ namespace UnityEditor.UI
             drawRect.height = EditorGUIUtility.singleLineHeight;
 
             SerializedProperty navigation = prop.FindPropertyRelative("m_Mode");
-            SerializedProperty wrapAround = prop.FindPropertyRelative("m_WrapAround");
             Navigation.Mode navMode = GetNavigationMode(navigation);
 
             EditorGUI.PropertyField(drawRect, navigation, s_Styles.navigationContent);
@@ -41,13 +40,6 @@ namespace UnityEditor.UI
 
             switch (navMode)
             {
-                case Navigation.Mode.Horizontal:
-                case Navigation.Mode.Vertical:
-                {
-                    EditorGUI.PropertyField(drawRect, wrapAround);
-                    drawRect.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-                }
-                break;
                 case Navigation.Mode.Explicit:
                 {
                     SerializedProperty selectOnUp = prop.FindPropertyRelative("m_SelectOnUp");
@@ -85,15 +77,9 @@ namespace UnityEditor.UI
 
             switch (navMode)
             {
-                case Navigation.Mode.None:
-                    return EditorGUIUtility.singleLineHeight;
-                case Navigation.Mode.Horizontal:
-                case Navigation.Mode.Vertical:
-                    return 2 * EditorGUIUtility.singleLineHeight + 2 * EditorGUIUtility.standardVerticalSpacing;
-                case Navigation.Mode.Explicit:
-                    return 5 * EditorGUIUtility.singleLineHeight + 5 * EditorGUIUtility.standardVerticalSpacing;
-                default:
-                    return EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                case Navigation.Mode.None: return EditorGUIUtility.singleLineHeight;
+                case Navigation.Mode.Explicit: return 5 * EditorGUIUtility.singleLineHeight + 5 * EditorGUIUtility.standardVerticalSpacing;
+                default: return EditorGUIUtility.singleLineHeight + 1 * EditorGUIUtility.standardVerticalSpacing;
             }
         }
     }

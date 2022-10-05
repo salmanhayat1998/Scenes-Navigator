@@ -13,7 +13,6 @@ namespace UnityEngine.UI
     /// best to use it only for backgrounds or temporary visible graphics.
     /// </remarks>
 
-    [RequireComponent(typeof(CanvasRenderer))]
     [AddComponentMenu("UI/Raw Image", 12)]
     public class RawImage : MaskableGraphic
     {

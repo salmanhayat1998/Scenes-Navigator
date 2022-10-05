@@ -1,0 +1,22 @@
+Easy Scene Switcher
+
+Easy and best way to handle your scenes while working in Unity!
+
+Features:
+* Switch Scenes with single click.
+* Open Scenes Additively.
+* Get all build scenes with single click.
+* Create and add new scene with single click.
+* Asks to save before switching.
+
+Files structure:
+
+1) Editor - Contains one and only editor script.
+2) Resources - Delete button icon texture.
+3) Scenes - Demo Scenes
+
+How to use:
+
+1) Goto window > Scenes Holder.
+2) A custom editor window will popup, adjust it anywhere in your editor layout.
+3) Add scenes from project or get from build settings.

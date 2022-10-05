@@ -28,9 +28,7 @@ namespace UnityEngine.UI
             float xMax = current.xMax - offset.z;
             float yMin = current.yMin + offset.y;
             float yMax = current.yMax - offset.w;
-
-            var rectMaskParentsCount = rectMaskParents.Count;
-            for (var i = 1; i < rectMaskParentsCount; ++i)
+            for (var i = 1; i < rectMaskParents.Count; ++i)
             {
                 current = rectMaskParents[i].canvasRect;
                 offset = rectMaskParents[i].padding;
@@ -45,7 +43,10 @@ namespace UnityEngine.UI
             }
 
             validRect = xMax > xMin && yMax > yMin;
-            return validRect ? new Rect(xMin, yMin, xMax - xMin, yMax - yMin) : new Rect();
+            if (validRect)
+                return new Rect(xMin, yMin, xMax - xMin, yMax - yMin);
+            else
+                return new Rect();
         }
     }
 }

@@ -494,12 +494,6 @@ namespace UnityEngine.UI
                 Array.Copy(s_Selectables, temp, s_Selectables.Length);
                 s_Selectables = temp;
             }
-
-            if (EventSystem.current && EventSystem.current.currentSelectedGameObject == gameObject)
-            {
-                hasSelection = true;
-            }
-
             m_CurrentIndex = s_SelectableCount;
             s_Selectables[m_CurrentIndex] = this;
             s_SelectableCount++;
@@ -755,13 +749,7 @@ namespace UnityEngine.UI
             Vector3 localDir = Quaternion.Inverse(transform.rotation) * dir;
             Vector3 pos = transform.TransformPoint(GetPointOnRectEdge(transform as RectTransform, localDir));
             float maxScore = Mathf.NegativeInfinity;
-            float maxFurthestScore = Mathf.NegativeInfinity;
-            float score = 0;
-
-            bool wantsWrapAround = navigation.wrapAround && (m_Navigation.mode == Navigation.Mode.Vertical || m_Navigation.mode == Navigation.Mode.Horizontal);
-
             Selectable bestPick = null;
-            Selectable bestFurthestPick = null;
 
             for (int i = 0; i < s_SelectableCount; ++i)
             {
@@ -788,20 +776,6 @@ namespace UnityEngine.UI
                 // Value that is the distance out along the direction.
                 float dot = Vector3.Dot(dir, myVector);
 
-                // If element is in wrong direction and we have wrapAround enabled check and cache it if furthest away.
-                if (wantsWrapAround && dot < 0)
-                {
-                    score = -dot * myVector.sqrMagnitude;
-
-                    if (score > maxFurthestScore)
-                    {
-                        maxFurthestScore = score;
-                        bestFurthestPick = sel;
-                    }
-
-                    continue;
-                }
-
                 // Skip elements that are in the wrong direction or which have zero distance.
                 // This also ensures that the scoring formula below will not have a division by zero error.
                 if (dot <= 0)
@@ -821,7 +795,7 @@ namespace UnityEngine.UI
                 // that touches pos and whose center is located along dir. A way to visualize the resulting functionality is this:
                 // From the position pos, blow up a circular balloon so it grows in the direction of dir.
                 // The first Selectable whose center the circular balloon touches is the one that's chosen.
-                score = dot / myVector.sqrMagnitude;
+                float score = dot / myVector.sqrMagnitude;
 
                 if (score > maxScore)
                 {
@@ -829,9 +803,6 @@ namespace UnityEngine.UI
                     bestPick = sel;
                 }
             }
-
-            if (wantsWrapAround && null == bestPick) return bestFurthestPick;
-
             return bestPick;
         }
 

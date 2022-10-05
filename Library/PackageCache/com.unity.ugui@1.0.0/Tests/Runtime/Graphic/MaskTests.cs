@@ -63,18 +63,18 @@ namespace Graphics
         [UnityTest]
         public IEnumerator GetModifiedMaterialReturnsOriginalMaterialWhenNoGraphicComponentIsAttached()
         {
-            Object.DestroyImmediate(m_mask.gameObject.GetComponent<Image>());
+            Object.Destroy(m_mask.gameObject.GetComponent<Image>());
             yield return null;
             Material material = new Material(Graphic.defaultGraphicMaterial);
             Material modifiedMaterial = m_mask.GetModifiedMaterial(material);
             Assert.AreEqual(material, modifiedMaterial);
         }
 
-        private Dictionary<string, GameObject> CreateMaskHierarchy(string suffix, int hierarchyDepth, out GameObject root)
+        private Dictionary<string, GameObject> CreateMaskHierarchy(string suffix, int hierarchyDepth)
         {
             var nameToObjectMapping = new Dictionary<string, GameObject>();
 
-            root = new GameObject("root", typeof(RectTransform), typeof(Canvas));
+            GameObject root = new GameObject("root", typeof(RectTransform), typeof(Canvas));
             nameToObjectMapping["root"] = root;
 
             GameObject current = root;
@@ -94,13 +94,11 @@ namespace Graphics
         [Test]
         public void GetModifiedMaterialReturnsOriginalMaterialWhenDepthIsEightOrMore()
         {
-            GameObject root;
-            var objectsMap = CreateMaskHierarchy("subMask", 9, out root);
+            var objectsMap = CreateMaskHierarchy("subMask", 9);
             Mask mask = objectsMap["subMask" + 9].GetComponent<Mask>();
             Material material = new Material(Graphic.defaultGraphicMaterial);
             Material modifiedMaterial = mask.GetModifiedMaterial(material);
             Assert.AreEqual(material, modifiedMaterial);
-            GameObject.DestroyImmediate(root);
         }
 
         [Test]
@@ -126,11 +124,10 @@ namespace Graphics
         {
             for (int i = 2; i < 8; i++)
             {
-                GameObject root;
-                var objectsMap = CreateMaskHierarchy("subMask", i, out root);
-                Mask mask = objectsMap["subMask" + i].GetComponent<Mask>();
+                var nodesMap = CreateMaskHierarchy("subMask", i);
+                Mask mask = nodesMap["subMask" + i].GetComponent<Mask>();
 
-                int stencilDepth = MaskUtilities.GetStencilDepth(mask.transform, objectsMap["root"].transform);
+                int stencilDepth = MaskUtilities.GetStencilDepth(mask.transform, nodesMap["root"].transform);
 
                 int desiredStencilBit = 1 << stencilDepth;
                 Material material = new Material(Graphic.defaultGraphicMaterial);
@@ -146,8 +143,6 @@ namespace Graphics
                 Assert.AreEqual(ColorWriteMask.All, (ColorWriteMask)modifiedMaterial.GetInt("_ColorMask"));
                 Assert.AreEqual(1, modifiedMaterial.GetInt("_UseUIAlphaClip"));
                 Assert.IsTrue(modifiedMaterial.IsKeywordEnabled("UNITY_UI_ALPHACLIP"));
-
-                GameObject.DestroyImmediate(root);
             }
         }
 
