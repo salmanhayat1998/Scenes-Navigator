@@ -7,15 +7,14 @@ using UnityEngine.SceneManagement;
 
 public class TestWindow : EditorWindow
 {
-    public List<Object> scenes= new List<Object>();
+    public List<Object> scenes = new List<Object>();
     public static TestWindow testWindow;
     private EditorBuildSettingsScene[] EditroScenes;
-    private List<SceneAsset> sceneAssets = new List<SceneAsset>();
     [MenuItem("Window/Scenes Holder")]
     public static void Open()
-    {       
-          testWindow= GetWindow<TestWindow>(false,"Project Scenes",true);
-          testWindow.Show();
+    {
+        testWindow = GetWindow<TestWindow>(false, "Project Scenes", true);
+        testWindow.Show();
     }
     void OnGUI()
     {
@@ -32,7 +31,6 @@ public class TestWindow : EditorWindow
         {
             EditorGUILayout.BeginHorizontal();
             scenes[i] = EditorGUILayout.ObjectField(scenes[i], typeof(SceneAsset), true);
-            sceneAssets.Add(scenes[i]as SceneAsset);
             GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Open Scene"))
             {
@@ -43,13 +41,13 @@ public class TestWindow : EditorWindow
             if (GUILayout.Button("Open AdditiveScene"))
             {
                 EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-                EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scenes[i]),OpenSceneMode.Additive);
+                EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scenes[i]), OpenSceneMode.Additive);
             }
             GUI.backgroundColor = Color.red;
             if (GUILayout.Button("Remove"))
             {
-                scenes.Remove(scenes[i]);
-                sceneAssets.Remove(scenes[i] as SceneAsset);
+                scenes.RemoveAt(i);
+                // scenes.Remove(scenes[i]);
             }
             EditorGUILayout.EndHorizontal();
             GUI.backgroundColor = Color.white;
@@ -58,18 +56,29 @@ public class TestWindow : EditorWindow
         EditorGUILayout.Space();
         if (GUILayout.Button("Get Build Scenes"))
         {
-            GetScenes();
+            GetBuildScenes();
+        }
+
+        if (scenes.Count > 0)
+        {
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Remove All Scenes"))
+            {
+                RemoveAllScenes();
+            }
         }
 
 
     }
-    private void GetScenes()
+    private void GetBuildScenes()
     {
         EditroScenes = EditorBuildSettings.scenes;
+
         for (int i = 0; i < EditroScenes.Length; i++)
         {
+            // Debug.LogError(EditroScenes[i]);
             SceneAsset _sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(EditroScenes[i].path);
-            if (!sceneAssets.Contains(_sceneAsset))
+            if (!scenes.Contains(_sceneAsset))
             {
                 Object obj = new Object();
                 scenes.Add(obj);
@@ -77,20 +86,18 @@ public class TestWindow : EditorWindow
             }
         }
 
-        //for (int i = 0; i <  SceneManager.sceneCountInBuildSettings; i++)
-        //{
-            
-        //    if (i>=scenes.Count)
-        //    {
-        //        Object obj = new Object();
-        //        scenes.Add(obj);
-        //        string path= AssetDatabase.GetAssetPath(SceneManager.GetSceneByBuildIndex(i));
-        //        SceneAsset sceneAsset = AssetDatabase.GetAssetOrScenePath();
-        //        //scenes[i] = s;
-        //    }
+        for (int i = 0; i < scenes.Count; i++)
+        {
+            if (scenes[i] == null)
+            {
+                scenes.RemoveAt(i);
+            }
+        }
 
-        //}
-
+    }
+    private void RemoveAllScenes()
+    {
+        scenes.Clear();
     }
 
 
