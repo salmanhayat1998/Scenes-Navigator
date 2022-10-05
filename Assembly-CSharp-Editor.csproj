@@ -658,10 +658,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{BE977CC1-B2E3-5BB5-B813-FBDC9A5AD333}</Project>
-      <Name>Assembly-CSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="UnityEngine.TestRunner.csproj">
       <Project>{2621B24E-1C4A-07CA-4D14-993F39D6CCAD}</Project>
       <Name>UnityEngine.TestRunner</Name>
