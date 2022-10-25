@@ -8,19 +8,40 @@ using System.IO;
 public class TestWindow : EditorWindow
 {
     public List<Object> scenes = new List<Object>();
-    public static TestWindow testWindow;
     private EditorBuildSettingsScene[] EditroScenes;
     Vector2 scrollPos = Vector2.zero;
     static int assetno = 0;
+    float _w;
+    float _h;
+    float windowWidth
+    { 
+        get 
+        {
+            if (_w==0)
+            {
+                _w = GetWindow<TestWindow>(false, "Project Scenes", true).position.width;
+            }
+            return _w;
+        } 
+    }  
+    float windowHeight
+    { 
+        get 
+        {
+            if (_h==0)
+            {
+                _h = GetWindow<TestWindow>(false, "Project Scenes", true).position.height;
+            }
+            return _h;
+        } 
+    }
     [MenuItem("Window/Scenes Holder")]
     public static void Open()
     {
-        testWindow = GetWindow<TestWindow>(false, "Project Scenes", true);
+        TestWindow testWindow = GetWindow<TestWindow>(false, "Project Scenes", true);
         testWindow.Show();
-    }
-    private void OnEnable()
-    {
-        testWindow = GetWindow<TestWindow>(false, "Project Scenes", true);
+        //width = testWindow.position.width;
+        //height = testWindow.position.height;
     }
     void OnGUI()
     {
@@ -32,7 +53,7 @@ public class TestWindow : EditorWindow
             Object obj = new Object();
             scenes.Add(obj);
 
-        }   
+        }
         if (GUILayout.Button("Create New Scene"))
         {
             EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
@@ -55,11 +76,12 @@ public class TestWindow : EditorWindow
 
         if (scenes.Count > 0)
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(testWindow.position.width), GUILayout.Height(testWindow.position.height - 120));
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(windowWidth), GUILayout.Height(windowHeight - 120));
             for (int i = 0; i < scenes.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
                 scenes[i] = EditorGUILayout.ObjectField(scenes[i], typeof(SceneAsset), true);
+
                 GUI.backgroundColor = Color.green;
                 if (GUILayout.Button("Open Scene"))
                 {
@@ -72,6 +94,16 @@ public class TestWindow : EditorWindow
                     EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                     EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scenes[i]), OpenSceneMode.Additive);
                 }
+                //if (EditorSceneManager.loadedSceneCount>1 )
+                //{
+                //   // Debug.Log(EditorSceneManager.GetSceneManagerSetup().Length);
+                //    GUI.backgroundColor = Color.yellow;
+                //    if (GUILayout.Button("Unload"))
+                //    {
+                //        //EditorSceneManager.UnloadScene(AssetDatabase.GetAssetPath(scenes[i]));
+                //    }              
+
+                //}
                 GUI.backgroundColor = Color.red;
                 if (GUILayout.Button("Remove"))
                 {
