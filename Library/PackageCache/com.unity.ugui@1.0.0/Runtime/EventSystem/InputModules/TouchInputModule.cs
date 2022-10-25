@@ -68,7 +68,10 @@ namespace UnityEngine.EventSystems
                 return wantsEnable;
             }
 
-            return input.touchCount > 0;
+            if (input.touchCount > 0)
+                return true;
+
+            return false;
         }
 
         private bool UseFakeInput()

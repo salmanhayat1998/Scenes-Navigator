@@ -45,7 +45,7 @@ public class TestWindow : EditorWindow
     }
     void OnGUI()
     {
-        GUILayout.Label("Scenes Settings", EditorStyles.boldLabel);
+        GUILayout.Label("Scenes Menu", EditorStyles.boldLabel);
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add Scene From Project"))
@@ -83,13 +83,13 @@ public class TestWindow : EditorWindow
                 scenes[i] = EditorGUILayout.ObjectField(scenes[i], typeof(SceneAsset), true);
 
                 GUI.backgroundColor = Color.green;
-                if (GUILayout.Button("Open Scene"))
+                if (GUILayout.Button("Open"))
                 {
                     EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                     EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scenes[i]));
                 }
                 GUI.backgroundColor = Color.cyan;
-                if (GUILayout.Button("Open AdditiveScene"))
+                if (GUILayout.Button("Open Additive"))
                 {
                     EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                     EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scenes[i]), OpenSceneMode.Additive);
@@ -105,7 +105,8 @@ public class TestWindow : EditorWindow
 
                 //}
                 GUI.backgroundColor = Color.red;
-                if (GUILayout.Button("Remove"))
+                Texture icon = Resources.Load("delicon") as Texture;
+                if (GUILayout.Button(icon))
                 {
                     scenes.RemoveAt(i);
                 }

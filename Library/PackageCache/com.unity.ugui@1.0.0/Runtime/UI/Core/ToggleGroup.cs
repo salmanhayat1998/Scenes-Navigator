@@ -41,12 +41,6 @@ namespace UnityEngine.UI
             base.Start();
         }
 
-        protected override void OnEnable()
-        {
-            EnsureValidState();
-            base.OnEnable();
-        }
-
         private void ValidateToggleIsInGroup(Toggle toggle)
         {
             if (toggle == null || !m_Toggles.Contains(toggle))
@@ -105,22 +99,6 @@ namespace UnityEngine.UI
                 m_Toggles[0].isOn = true;
                 NotifyToggleOn(m_Toggles[0]);
             }
-
-            IEnumerable<Toggle> activeToggles = ActiveToggles();
-
-            if (activeToggles.Count() > 1)
-            {
-                Toggle firstActive = GetFirstActiveToggle();
-
-                foreach (Toggle toggle in activeToggles)
-                {
-                    if (toggle == firstActive)
-                    {
-                        continue;
-                    }
-                    toggle.isOn = false;
-                }
-            }
         }
 
         /// <summary>
@@ -142,19 +120,6 @@ namespace UnityEngine.UI
         public IEnumerable<Toggle> ActiveToggles()
         {
             return m_Toggles.Where(x => x.isOn);
-        }
-
-        /// <summary>
-        /// Returns the toggle that is the first in the list of active toggles.
-        /// </summary>
-        /// <returns>The first active toggle from m_Toggles</returns>
-        /// <remarks>
-        /// Get the active toggle for this group. As the group
-        /// </remarks>
-        public Toggle GetFirstActiveToggle()
-        {
-            IEnumerable<Toggle> activeToggles = ActiveToggles();
-            return activeToggles.Count() > 0 ? activeToggles.First() : null;
         }
 
         /// <summary>

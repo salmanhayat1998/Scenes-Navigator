@@ -123,8 +123,7 @@ namespace UnityEngine.UI
             // this won't forward the == operator to the MB, but just check if the
             // interface is null. IsDestroyed will return if the backend is destroyed.
 
-            var layoutRebuildQueueCount = m_LayoutRebuildQueue.Count;
-            for (int i = layoutRebuildQueueCount - 1; i >= 0; --i)
+            for (int i = m_LayoutRebuildQueue.Count - 1; i >= 0; --i)
             {
                 var item = m_LayoutRebuildQueue[i];
                 if (item == null)
@@ -140,8 +139,7 @@ namespace UnityEngine.UI
                 }
             }
 
-            var graphicRebuildQueueCount = m_GraphicRebuildQueue.Count;
-            for (int i = graphicRebuildQueueCount - 1; i >= 0; --i)
+            for (int i = m_GraphicRebuildQueue.Count - 1; i >= 0; --i)
             {
                 var item = m_GraphicRebuildQueue[i];
                 if (item == null)
@@ -167,14 +165,12 @@ namespace UnityEngine.UI
             m_PerformingLayoutUpdate = true;
 
             m_LayoutRebuildQueue.Sort(s_SortLayoutFunction);
-
             for (int i = 0; i <= (int)CanvasUpdate.PostLayout; i++)
             {
                 UnityEngine.Profiling.Profiler.BeginSample(m_CanvasUpdateProfilerStrings[i]);
-
                 for (int j = 0; j < m_LayoutRebuildQueue.Count; j++)
                 {
-                    var rebuild = m_LayoutRebuildQueue[j];
+                    var rebuild = instance.m_LayoutRebuildQueue[j];
                     try
                     {
                         if (ObjectValidForUpdate(rebuild))
@@ -191,7 +187,7 @@ namespace UnityEngine.UI
             for (int i = 0; i < m_LayoutRebuildQueue.Count; ++i)
                 m_LayoutRebuildQueue[i].LayoutComplete();
 
-            m_LayoutRebuildQueue.Clear();
+            instance.m_LayoutRebuildQueue.Clear();
             m_PerformingLayoutUpdate = false;
             UISystemProfilerApi.EndSample(UISystemProfilerApi.SampleType.Layout);
             UISystemProfilerApi.BeginSample(UISystemProfilerApi.SampleType.Render);
@@ -202,21 +198,20 @@ namespace UnityEngine.UI
             UnityEngine.Profiling.Profiler.EndSample();
 
             m_PerformingGraphicUpdate = true;
-
             for (var i = (int)CanvasUpdate.PreRender; i < (int)CanvasUpdate.MaxUpdateValue; i++)
             {
                 UnityEngine.Profiling.Profiler.BeginSample(m_CanvasUpdateProfilerStrings[i]);
-                for (var k = 0; k < m_GraphicRebuildQueue.Count; k++)
+                for (var k = 0; k < instance.m_GraphicRebuildQueue.Count; k++)
                 {
                     try
                     {
-                        var element = m_GraphicRebuildQueue[k];
+                        var element = instance.m_GraphicRebuildQueue[k];
                         if (ObjectValidForUpdate(element))
                             element.Rebuild((CanvasUpdate)i);
                     }
                     catch (Exception e)
                     {
-                        Debug.LogException(e, m_GraphicRebuildQueue[k].transform);
+                        Debug.LogException(e, instance.m_GraphicRebuildQueue[k].transform);
                     }
                 }
                 UnityEngine.Profiling.Profiler.EndSample();
@@ -225,7 +220,7 @@ namespace UnityEngine.UI
             for (int i = 0; i < m_GraphicRebuildQueue.Count; ++i)
                 m_GraphicRebuildQueue[i].GraphicUpdateComplete();
 
-            m_GraphicRebuildQueue.Clear();
+            instance.m_GraphicRebuildQueue.Clear();
             m_PerformingGraphicUpdate = false;
             UISystemProfilerApi.EndSample(UISystemProfilerApi.SampleType.Render);
         }

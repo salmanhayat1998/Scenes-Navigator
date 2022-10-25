@@ -116,7 +116,7 @@ namespace UnityEngine.UI.Collections
                 T item = m_List[index];
                 m_Dictionary.Remove(item);
                 m_List[index] = value;
-                m_Dictionary.Add(value, index);
+                m_Dictionary.Add(item, index);
             }
         }
 

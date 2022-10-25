@@ -1,0 +1,20 @@
+{"ActiveWorkflow" : "UnitypackageWorkflow", "FolderWorkflow" : {
+"mainPath" : {
+"path" : null, 
+"guid" : ""
+}, 
+"extraPaths" : [], 
+"dependencies" : false
+}, "UnitypackageWorkflow" : {
+"mainPath" : {
+"path" : "Assets\/Scenes Switcher.unitypackage", 
+"guid" : "e90808dd5c0a52543b0933c0ac9f7c7b"
+}, 
+"extraPaths" : []
+}, "HybridPackageWorkflow" : {
+"mainPath" : {
+"path" : null, 
+"guid" : ""
+}, 
+"extraPaths" : []
+}}

@@ -18,18 +18,10 @@ namespace UnityEditor.UI
         protected SerializedProperty m_Color;
         protected SerializedProperty m_Material;
         protected SerializedProperty m_RaycastTarget;
-        protected SerializedProperty m_RaycastPadding;
         protected SerializedProperty m_Maskable;
 
         private GUIContent m_CorrectButtonContent;
         protected AnimBool m_ShowNativeSize;
-
-        GUIContent m_PaddingContent;
-        GUIContent m_LeftContent;
-        GUIContent m_RightContent;
-        GUIContent m_TopContent;
-        GUIContent m_BottomContent;
-        static private bool m_ShowPadding = false;
 
         protected virtual void OnDisable()
         {
@@ -40,17 +32,11 @@ namespace UnityEditor.UI
         protected virtual void OnEnable()
         {
             m_CorrectButtonContent = EditorGUIUtility.TrTextContent("Set Native Size", "Sets the size to match the content.");
-            m_PaddingContent = EditorGUIUtility.TrTextContent("Raycast Padding");
-            m_LeftContent = EditorGUIUtility.TrTextContent("Left");
-            m_RightContent = EditorGUIUtility.TrTextContent("Right");
-            m_TopContent = EditorGUIUtility.TrTextContent("Top");
-            m_BottomContent = EditorGUIUtility.TrTextContent("Bottom");
 
             m_Script = serializedObject.FindProperty("m_Script");
             m_Color = serializedObject.FindProperty("m_Color");
             m_Material = serializedObject.FindProperty("m_Material");
             m_RaycastTarget = serializedObject.FindProperty("m_RaycastTarget");
-            m_RaycastPadding = serializedObject.FindProperty("m_RaycastPadding");
             m_Maskable = serializedObject.FindProperty("m_Maskable");
 
             m_ShowNativeSize = new AnimBool(false);
@@ -125,28 +111,6 @@ namespace UnityEditor.UI
         protected void RaycastControlsGUI()
         {
             EditorGUILayout.PropertyField(m_RaycastTarget);
-
-            m_ShowPadding = EditorGUILayout.Foldout(m_ShowPadding, m_PaddingContent);
-
-            if (m_ShowPadding)
-            {
-                using (var check = new EditorGUI.ChangeCheckScope())
-                {
-                    EditorGUI.indentLevel++;
-                    Vector4 newPadding = m_RaycastPadding.vector4Value;
-
-                    newPadding.x = EditorGUILayout.FloatField(m_LeftContent, newPadding.x);
-                    newPadding.z = EditorGUILayout.FloatField(m_RightContent, newPadding.z);
-                    newPadding.w = EditorGUILayout.FloatField(m_TopContent, newPadding.w);
-                    newPadding.y = EditorGUILayout.FloatField(m_BottomContent, newPadding.y);
-
-                    if (check.changed)
-                    {
-                        m_RaycastPadding.vector4Value = newPadding;
-                    }
-                    EditorGUI.indentLevel--;
-                }
-            }
         }
     }
 }

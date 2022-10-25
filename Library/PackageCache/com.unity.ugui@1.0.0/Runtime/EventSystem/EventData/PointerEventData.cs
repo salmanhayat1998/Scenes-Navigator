@@ -80,11 +80,6 @@ namespace UnityEngine.EventSystems
         public GameObject pointerDrag { get; set; }
 
         /// <summary>
-        /// The object that should receive the 'OnPointerClick' event.
-        /// </summary>
-        public GameObject pointerClick { get; set; }
-
-        /// <summary>
         /// RaycastResult associated with the current event.
         /// </summary>
         public RaycastResult pointerCurrentRaycast { get; set; }

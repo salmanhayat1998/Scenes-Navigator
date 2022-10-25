@@ -86,10 +86,6 @@ namespace UnityEngine.UI
         [SerializeField]
         private Mode m_Mode;
 
-        [Tooltip("Enables navigation to wrap around from last to first or first to last element. Does not work for automatic grid navigation")]
-        [SerializeField]
-        private bool m_WrapAround;
-
         // Game object selected when the joystick moves up. Used when navigation is set to "Explicit".
         [SerializeField]
         private Selectable m_SelectOnUp;
@@ -110,15 +106,6 @@ namespace UnityEngine.UI
         /// Navigation mode.
         /// </summary>
         public Mode       mode           { get { return m_Mode; } set { m_Mode = value; } }
-
-        /// <summary>
-        /// Enables navigation to wrap around from last to first or first to last element.
-        /// Will find the furthest element from the current element in the opposite direction of movement.
-        /// </summary>
-        /// <example>
-        /// Note: If you have a grid of elements and you are on the last element in a row it will not wrap over to the next row it will pick the furthest element in the opposite direction.
-        /// </example>
-        public bool wrapAround { get { return m_WrapAround; } set { m_WrapAround = value; } }
 
         /// <summary>
         /// Specify a Selectable UI GameObject to highlight when the Up arrow key is pressed.
@@ -279,7 +266,6 @@ namespace UnityEngine.UI
             {
                 var defaultNav = new Navigation();
                 defaultNav.m_Mode = Mode.Automatic;
-                defaultNav.m_WrapAround = false;
                 return defaultNav;
             }
         }

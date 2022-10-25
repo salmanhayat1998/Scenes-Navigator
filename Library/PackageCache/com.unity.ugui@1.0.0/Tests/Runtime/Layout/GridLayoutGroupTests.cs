@@ -164,16 +164,10 @@ class GridLayoutGroupTests : IPrebuildSetup
         m_LayoutGroup = m_PrefabRoot.GetComponentInChildren<GridLayoutGroup>();
     }
 
-    [TearDown]
+    [OneTimeTearDown]
     public void TearDown()
     {
         GameObject.DestroyImmediate(m_PrefabRoot);
-        m_LayoutGroup = null;
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTearDown()
-    {
 #if UNITY_EDITOR
         AssetDatabase.DeleteAsset(kPrefabPath);
 #endif

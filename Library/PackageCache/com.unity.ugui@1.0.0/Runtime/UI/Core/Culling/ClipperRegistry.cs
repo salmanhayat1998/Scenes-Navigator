@@ -41,8 +41,7 @@ namespace UnityEngine.UI
         /// </summary>
         public void Cull()
         {
-            var clippersCount = m_Clippers.Count;
-            for (var i = 0; i < clippersCount; ++i)
+            for (var i = 0; i < m_Clippers.Count; ++i)
             {
                 m_Clippers[i].PerformClipping();
             }

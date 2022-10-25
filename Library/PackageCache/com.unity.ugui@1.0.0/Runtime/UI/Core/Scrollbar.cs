@@ -142,10 +142,7 @@ namespace UnityEngine.UI
         // Size of each step.
         float stepSize { get { return (m_NumberOfSteps > 1) ? 1f / (m_NumberOfSteps - 1) : 0.1f; } }
 
-        // field is never assigned warning
-        #pragma warning disable 649
         private DrivenRectTransformTracker m_Tracker;
-        #pragma warning restore 649
         private Coroutine m_PointerDownRepeat;
         private bool isPointerDownAndNotDragging = false;
 

@@ -158,8 +158,7 @@ namespace UnityEngine.EventSystems
 
             public bool AnyPressesThisFrame()
             {
-                var trackedButtonsCount = m_TrackedButtons.Count;
-                for (int i = 0; i < trackedButtonsCount; i++)
+                for (int i = 0; i < m_TrackedButtons.Count; i++)
                 {
                     if (m_TrackedButtons[i].eventData.PressedThisFrame())
                         return true;
@@ -169,8 +168,7 @@ namespace UnityEngine.EventSystems
 
             public bool AnyReleasesThisFrame()
             {
-                var trackedButtonsCount = m_TrackedButtons.Count;
-                for (int i = 0; i < trackedButtonsCount; i++)
+                for (int i = 0; i < m_TrackedButtons.Count; i++)
                 {
                     if (m_TrackedButtons[i].eventData.ReleasedThisFrame())
                         return true;
@@ -181,8 +179,7 @@ namespace UnityEngine.EventSystems
             public ButtonState GetButtonState(PointerEventData.InputButton button)
             {
                 ButtonState tracked = null;
-                var trackedButtonsCount = m_TrackedButtons.Count;
-                for (int i = 0; i < trackedButtonsCount; i++)
+                for (int i = 0; i < m_TrackedButtons.Count; i++)
                 {
                     if (m_TrackedButtons[i].button == button)
                     {
@@ -285,15 +282,11 @@ namespace UnityEngine.EventSystems
             // copy the apropriate data into right and middle slots
             PointerEventData rightData;
             GetPointerData(kMouseRightId, out rightData, true);
-            rightData.Reset();
-
             CopyFromTo(leftData, rightData);
             rightData.button = PointerEventData.InputButton.Right;
 
             PointerEventData middleData;
             GetPointerData(kMouseMiddleId, out middleData, true);
-            middleData.Reset();
-
             CopyFromTo(leftData, middleData);
             middleData.button = PointerEventData.InputButton.Middle;
 

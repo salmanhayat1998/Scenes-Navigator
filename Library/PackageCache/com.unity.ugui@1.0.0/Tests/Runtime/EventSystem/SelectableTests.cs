@@ -29,8 +29,6 @@ namespace UnityEngine.UI.Tests
         }
 
         private SelectableTest selectable;
-        private GameObject m_CanvasRoot;
-        private GameObject m_EventSystemGO;
 
         private CanvasGroup CreateAndParentGroupTo(string name, GameObject child)
         {
@@ -44,12 +42,11 @@ namespace UnityEngine.UI.Tests
         [SetUp]
         public void TestSetup()
         {
-            m_EventSystemGO = new GameObject("EventSystem", typeof(EventSystem));
-            EventSystem.current = m_EventSystemGO.GetComponent<EventSystem>();
-            m_CanvasRoot = new GameObject("Canvas", typeof(RectTransform), typeof(Canvas));
+            EventSystem.current = new GameObject("EventSystem", typeof(EventSystem)).GetComponent<EventSystem>();
+            GameObject canvasRoot = new GameObject("Canvas", typeof(RectTransform), typeof(Canvas));
             GameObject SelectableGO = new GameObject("Selectable", typeof(RectTransform), typeof(CanvasRenderer));
 
-            SelectableGO.transform.SetParent(m_CanvasRoot.transform);
+            SelectableGO.transform.SetParent(canvasRoot.transform);
             selectable = SelectableGO.AddComponent<SelectableTest>();
             selectable.targetGraphic = selectable.gameObject.AddComponent<ConcreteGraphic>();
         }
@@ -57,8 +54,7 @@ namespace UnityEngine.UI.Tests
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(m_CanvasRoot);
-            GameObject.DestroyImmediate(m_EventSystemGO);
+            EventSystem.current = null;
         }
 
         [Test] // regression test 1160054
@@ -407,21 +403,21 @@ namespace UnityEngine.UI.Tests
         [Test] // regression test 787563
         public void SettingInteractableWithNoEventSystemShouldNotCrash()
         {
-            EventSystem.current.enabled = false;
+            EventSystem.current = null;
             selectable.interactable = false;
         }
 
         [Test] // regression test 787563
         public void OnPointerDownWithNoEventSystemShouldNotCrash()
         {
-            EventSystem.current.enabled = false;
+            EventSystem.current = null;
             selectable.OnPointerDown(new PointerEventData(EventSystem.current) {button = PointerEventData.InputButton.Left});
         }
 
         [Test] // regression test 787563
         public void SelectWithNoEventSystemShouldNotCrash()
         {
-            EventSystem.current.enabled = false;
+            EventSystem.current = null;
             selectable.Select();
         }
 

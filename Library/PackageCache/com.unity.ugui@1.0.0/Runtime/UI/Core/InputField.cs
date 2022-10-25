@@ -309,7 +309,6 @@ namespace UnityEngine.UI
         private bool m_HasDoneFocusTransition = false;
         private WaitForSecondsRealtime m_WaitForSecondsRealtime;
         private bool m_TouchKeyboardAllowsInPlaceEditing = false;
-        private bool m_IsCompositionActive = false;
 
         private BaseInput input
         {
@@ -1707,7 +1706,6 @@ namespace UnityEngine.UI
             bool shift = (currentEventModifiers & EventModifiers.Shift) != 0;
             bool alt = (currentEventModifiers & EventModifiers.Alt) != 0;
             bool ctrlOnly = ctrl && !alt && !shift;
-            bool shiftOnly = shift && !ctrl && !alt;
 
             switch (evt.keyCode)
             {
@@ -1789,26 +1787,6 @@ namespace UnityEngine.UI
                     }
                     break;
                 }
-                case KeyCode.Insert:
-                {
-                    // Copy via Insert key
-                    if (ctrlOnly)
-                    {
-                        if (inputType != InputType.Password)
-                            clipboard = GetSelectedString();
-                        else
-                            clipboard = "";
-                        return EditState.Continue;
-                    }
-                    // Paste via insert key.
-                    else if (shiftOnly)
-                    {
-                        Append(clipboard);
-                        UpdateLabel();
-                        return EditState.Continue;
-                    }
-                    break;
-                }
 
                 case KeyCode.LeftArrow:
                 {
@@ -1878,9 +1856,6 @@ namespace UnityEngine.UI
 
         private bool IsValidChar(char c)
         {
-            if (c == 0)
-                return false;
-
             // Delete key on mac
             if ((int)c == 127)
                 return false;
@@ -1920,24 +1895,12 @@ namespace UnityEngine.UI
                 if (m_ProcessingEvent.rawType == EventType.KeyDown)
                 {
                     consumedEvent = true;
-
-                    // Special handling on OSX which produces more events which need to be suppressed.
-                    if (m_IsCompositionActive && compositionString.Length == 0)
-                    {
-                        // Suppress other events related to navigation or termination of composition sequence.
-                        if (m_ProcessingEvent.character == 0 && m_ProcessingEvent.modifiers == EventModifiers.None)
-                        {
-                            continue;
-                        }
-                    }
-
                     var shouldContinue = KeyPressed(m_ProcessingEvent);
                     if (shouldContinue == EditState.Finish)
                     {
                         DeactivateInputField();
-                        continue;
+                        break;
                     }
-                    UpdateLabel();
                 }
 
                 switch (m_ProcessingEvent.type)
@@ -2326,25 +2289,10 @@ namespace UnityEngine.UI
 
             // If we have an input validator, validate the input first
             int insertionPoint = Math.Min(selectionFocusPosition, selectionAnchorPosition);
-
-            //Get the text based on selection for validation instead of whole text(case 1253193).
-            var validateText = text;
-            if (selectionFocusPosition != selectionAnchorPosition)
-            {
-                if (caretPositionInternal < caretSelectPositionInternal)
-                {
-                    validateText = text.Substring(0, caretPositionInternal) + text.Substring(caretSelectPositionInternal, text.Length - caretSelectPositionInternal);
-                }
-                else
-                {
-                    validateText = text.Substring(0, caretSelectPositionInternal) + text.Substring(caretPositionInternal, text.Length - caretPositionInternal);
-                }
-            }
-
             if (onValidateInput != null)
-                input = onValidateInput(validateText, insertionPoint, input);
+                input = onValidateInput(text, insertionPoint, input);
             else if (characterValidation != CharacterValidation.None)
-                input = Validate(validateText, insertionPoint, input);
+                input = Validate(text, insertionPoint, input);
 
             // If the input is invalid, skip it
             if (input == 0)
@@ -2377,17 +2325,10 @@ namespace UnityEngine.UI
                 m_PreventFontCallback = true;
 
                 string fullText;
-
                 if (EventSystem.current != null && gameObject == EventSystem.current.currentSelectedGameObject && compositionString.Length > 0)
-                {
-                    m_IsCompositionActive = true;
                     fullText = text.Substring(0, m_CaretPosition) + compositionString + text.Substring(m_CaretPosition);
-                }
                 else
-                {
-                    m_IsCompositionActive = false;
                     fullText = text;
-                }
 
                 string processed;
                 if (inputType == InputType.Password)

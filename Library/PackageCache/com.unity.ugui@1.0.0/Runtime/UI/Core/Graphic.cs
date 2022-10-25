@@ -14,6 +14,7 @@ namespace UnityEngine.UI
     /// Base class for all UI components that should be derived from when creating new Graphic types.
     /// </summary>
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(CanvasRenderer))]
     [RequireComponent(typeof(RectTransform))]
     [ExecuteAlways]
     /// <summary>
@@ -155,45 +156,7 @@ namespace UnityEngine.UI
         /// <summary>
         /// Should this graphic be considered a target for raycasting?
         /// </summary>
-        public virtual bool raycastTarget
-        {
-            get
-            {
-                return m_RaycastTarget;
-            }
-            set
-            {
-                if (value != m_RaycastTarget)
-                {
-                    if (m_RaycastTarget)
-                        GraphicRegistry.UnregisterRaycastGraphicForCanvas(canvas, this);
-
-                    m_RaycastTarget = value;
-
-                    if (m_RaycastTarget && isActiveAndEnabled)
-                        GraphicRegistry.RegisterRaycastGraphicForCanvas(canvas, this);
-                }
-            }
-        }
-
-        [SerializeField]
-        private Vector4 m_RaycastPadding = new Vector4();
-
-        /// <summary>
-        /// Padding to be applied to the masking
-        /// X = Left
-        /// Y = Bottom
-        /// Z = Right
-        /// W = Top
-        /// </summary>
-        public Vector4 raycastPadding
-        {
-            get { return m_RaycastPadding; }
-            set
-            {
-                m_RaycastPadding = value;
-            }
-        }
+        public virtual bool raycastTarget { get { return m_RaycastTarget; } set { m_RaycastTarget = value; } }
 
         [NonSerialized] private RectTransform m_RectTransform;
         [NonSerialized] private CanvasRenderer m_CanvasRenderer;
@@ -411,10 +374,6 @@ namespace UnityEngine.UI
                         m_Canvas = list[i];
                         break;
                     }
-
-                    // if we reached the end and couldn't find an active and enabled canvas, we should return null . case 1171433
-                    if (i == list.Count - 1)
-                        m_Canvas = null;
                 }
             }
             else
@@ -437,11 +396,6 @@ namespace UnityEngine.UI
                 if (ReferenceEquals(m_CanvasRenderer, null))
                 {
                     m_CanvasRenderer = GetComponent<CanvasRenderer>();
-
-                    if (ReferenceEquals(m_CanvasRenderer, null))
-                    {
-                        m_CanvasRenderer = gameObject.AddComponent<CanvasRenderer>();
-                    }
                 }
                 return m_CanvasRenderer;
             }
@@ -772,7 +726,6 @@ namespace UnityEngine.UI
             // and associated components... The correct way to do this is by
             // calling OnValidate... Because MB's don't have a common base class
             // we do this via reflection. It's nasty and ugly... Editor only.
-            m_SkipLayoutUpdate = true;
             var mbs = gameObject.GetComponents<MonoBehaviour>();
             foreach (var mb in mbs)
             {
@@ -782,7 +735,6 @@ namespace UnityEngine.UI
                 if (methodInfo != null)
                     methodInfo.Invoke(mb, null);
             }
-            m_SkipLayoutUpdate = false;
         }
 
         protected override void Reset()
