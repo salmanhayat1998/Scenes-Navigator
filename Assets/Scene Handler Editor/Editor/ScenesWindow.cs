@@ -1,48 +1,27 @@
-﻿using System.Collections.Generic;
+﻿/// This script is created By Salman Hayat, is free to use and is available on Github
+/// for any queries , contact at salmanhayat16@gmail.com
+/// Github link: https://github.com/salmanhayat1998/Scenes-Navigator
+/// Social link: https://www.linkedin.com/in/salmanhayat/ 
+
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using System.IO;
 
-public class TestWindow : EditorWindow
+public class ScenesWindow : EditorWindow
 {
     public List<Object> scenes = new List<Object>();
     private EditorBuildSettingsScene[] EditroScenes;
     Vector2 scrollPos = Vector2.zero;
     static int assetno = 0;
-    float _w;
-    float _h;
-    float windowWidth
-    { 
-        get 
-        {
-            if (_w==0)
-            {
-                _w = GetWindow<TestWindow>(false, "Project Scenes", true).position.width;
-            }
-            return _w;
-        } 
-    }  
-    float windowHeight
-    { 
-        get 
-        {
-            if (_h==0)
-            {
-                _h = GetWindow<TestWindow>(false, "Project Scenes", true).position.height;
-            }
-            return _h;
-        } 
-    }
     [MenuItem("Window/Scenes Holder")]
     public static void Open()
     {
-        TestWindow testWindow = GetWindow<TestWindow>(false, "Project Scenes", true);
-        testWindow.Show();
-        //width = testWindow.position.width;
-        //height = testWindow.position.height;
+        GetWindow<ScenesWindow>(false, "Project Scenes", true);
     }
+
     void OnGUI()
     {
         GUILayout.Label("Scenes Menu", EditorStyles.boldLabel);
@@ -76,12 +55,11 @@ public class TestWindow : EditorWindow
 
         if (scenes.Count > 0)
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(windowWidth), GUILayout.Height(windowHeight - 120));
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(EditorWindow.GetWindow(typeof(ScenesWindow)).position.width), GUILayout.Height(EditorWindow.GetWindow(typeof(ScenesWindow)).position.height - 120));
             for (int i = 0; i < scenes.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
                 scenes[i] = EditorGUILayout.ObjectField(scenes[i], typeof(SceneAsset), true);
-
                 GUI.backgroundColor = Color.green;
                 if (GUILayout.Button("Open"))
                 {
@@ -94,16 +72,6 @@ public class TestWindow : EditorWindow
                     EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
                     EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(scenes[i]), OpenSceneMode.Additive);
                 }
-                //if (EditorSceneManager.loadedSceneCount>1 )
-                //{
-                //   // Debug.Log(EditorSceneManager.GetSceneManagerSetup().Length);
-                //    GUI.backgroundColor = Color.yellow;
-                //    if (GUILayout.Button("Unload"))
-                //    {
-                //        //EditorSceneManager.UnloadScene(AssetDatabase.GetAssetPath(scenes[i]));
-                //    }              
-
-                //}
                 GUI.backgroundColor = Color.red;
                 Texture icon = Resources.Load("delicon") as Texture;
                 if (GUILayout.Button(icon))
