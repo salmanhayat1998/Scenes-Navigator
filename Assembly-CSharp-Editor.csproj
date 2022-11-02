@@ -56,7 +56,7 @@
     <Analyzer Include="D:\VS\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scene Handler Editor\Editor\TestWindow.cs" />
+    <Compile Include="Assets\Scene Handler Editor\Editor\ScenesWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -7,8 +7,8 @@
 "dependencies" : false
 }, "UnitypackageWorkflow" : {
 "mainPath" : {
-"path" : "Assets\/Scenes Switcher.unitypackage", 
-"guid" : "e90808dd5c0a52543b0933c0ac9f7c7b"
+"path" : "Assets\/Easy Scene Switcher.unitypackage", 
+"guid" : "307d7169b54b1a442b7fea607262b690"
 }, 
 "extraPaths" : []
 }, "HybridPackageWorkflow" : {
