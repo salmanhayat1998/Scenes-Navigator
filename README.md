@@ -1,6 +1,14 @@
 # Scenes-Navigator
 
 A tool to place all your scenes and easily navigate between with a single click.
+### Features: 
+* Switch Scenes quickly.
+* Open Scenes Additively.
+* Get all build scenes with a single click.
+* Create and add a new scene with a single click.
+* Asks to save before switching.
+* just a single editor script, no DLLs.
+
 
 ## How to Use:
 
