@@ -19,7 +19,7 @@ public class ScenesWindow : EditorWindow
     [MenuItem("Window/Scenes Holder")]
     public static void Open()
     {
-        GetWindow<ScenesWindow>(false, "Project Scenes", true);
+        GetWindow<ScenesWindow>("Project Scenes");
     }
 
     void OnGUI()
@@ -55,7 +55,7 @@ public class ScenesWindow : EditorWindow
 
         if (scenes.Count > 0)
         {
-            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(EditorWindow.GetWindow(typeof(ScenesWindow)).position.width), GUILayout.Height(EditorWindow.GetWindow(typeof(ScenesWindow)).position.height - 120));
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, false, false, GUILayout.Width(position.width), GUILayout.Height(position.height - 120));
             for (int i = 0; i < scenes.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
